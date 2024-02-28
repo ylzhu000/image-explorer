@@ -1,0 +1,12 @@
+.search-container {
+	min-height: inherit;
+	width: 100%;
+
+	&__empty,
+	&__error {
+		min-height: 500px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}
