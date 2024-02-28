@@ -59,22 +59,17 @@ export default function ImagesList() {
 	return (
 		<Space direction="vertical" size="large">
 			<Row gutter={[16, 16]}>
-				{images?.map((image) => {
-					const link = image.link.includes(".jpg")
-						? image.link
-						: image?.images?.length && image.images[0].link;
-					return (
-						<Col key={image.id} xxl={4} lg={6} md={8} sm={12} xs={12}>
-							<LazyLoadImage
-								height={200}
-								width="100%"
-								src={link}
-								alt={image.title}
-								onClick={() => handlePreview(link)}
-							/>
-						</Col>
-					);
-				})}
+				{images?.map((image) => (
+					<Col key={image.id} xxl={4} lg={6} md={8} sm={12} xs={12}>
+						<LazyLoadImage
+							height={200}
+							width="100%"
+							src={image.link}
+							alt={image.title}
+							onClick={() => handlePreview(image.link)}
+						/>
+					</Col>
+				))}
 			</Row>
 
 			<Flex align="center" justify="center">

@@ -23,13 +23,21 @@ export function useImage() {
 
 				// Determine which loading to set
 				isSameSearch ? setLoadingMore(true) : setLoading(true);
-				const data = await getImages({ q, page });
-				setHasMore(!!data.data.length);
+				let data = await getImages({ q, page });
+				data = data?.data.map((image) => ({
+					link: image.link.includes(".jpg")
+						? image.link
+						: image?.images?.length && image.images[0].link,
+					title: image.title,
+					id: image.id,
+				}));
 
 				// If prev search keyword is not the same as current, refresh entire data. Otherwise, add new data into existing array
 				prevSearchParam === q
-					? setImages([...images, ...data.data])
-					: setImages(data.data);
+					? setImages([...images, ...data])
+					: setImages(data);
+
+				setHasMore(!!data.length);
 				setLoading(false);
 				setLoadingMore(false);
 				setPrevSearchParam(q);
