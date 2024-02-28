@@ -16,5 +16,5 @@ To get started with image explorer, follow these steps:
    ```
 3. Start the development server
    ```
-   yarn run dev
+   yarn run dev --host
    ```

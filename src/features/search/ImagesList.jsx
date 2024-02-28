@@ -5,7 +5,7 @@ import { useImage } from "./useImage";
 
 export default function ImagesList() {
 	const [searchParams, setSearchParams] = useSearchParams();
-	const { loading, images, hasMore, errors } = useImage();
+	const { loading, images, hasMore, errors, initialLoad } = useImage();
 
 	const loadMore = (e) => {
 		e.preventDefault();
@@ -16,6 +16,8 @@ export default function ImagesList() {
 			setSearchParams(searchParams);
 		}
 	};
+
+	if (initialLoad) return;
 
 	if (errors) {
 		return (
@@ -45,6 +47,7 @@ export default function ImagesList() {
 						<Image
 							loading="lazy"
 							height={200}
+							width="100%"
 							src={
 								image.link.includes(".jpg")
 									? image.link

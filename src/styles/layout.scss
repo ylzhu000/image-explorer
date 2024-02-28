@@ -13,3 +13,11 @@
 		padding: 24px;
 	}
 }
+
+@media only screen and (max-width: 450px) {
+	.layout {
+		&__header {
+			padding: 0 24px;
+		}
+	}
+}

@@ -1,15 +1,15 @@
-import { Input, Row, Col } from "antd";
-import { useEffect, useState } from "react";
+import { Input, Row, Col, Space } from "antd";
+import Typography from "antd/es/typography/Typography";
+import { createRef, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function Search() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [value, setValue] = useState("");
+	const inputRef = createRef();
 
-	// Set default pages if page param is not defined
+	// Always set default page to 1 when refresh or default for data consistency
 	const setPageParam = () => {
-		// const defaultPage = searchParams.get("page");
-		// const updatedPage = page ? page : defaultPage ? defaultPage : 1;
 		searchParams.set("page", 1);
 		setSearchParams(searchParams);
 	};
@@ -23,6 +23,11 @@ export default function Search() {
 		if (defaultSearchValue) {
 			setPageParam();
 		}
+
+		// Focus input field for initial rendering
+		inputRef?.current.focus({
+			cursor: "start",
+		});
 	}, []);
 
 	const handleChange = (e) => {
@@ -30,7 +35,7 @@ export default function Search() {
 	};
 
 	const handleSearch = (value) => {
-		if (value !== "") {
+		if (value) {
 			searchParams.set("q", value);
 			setSearchParams(searchParams);
 			setPageParam();
@@ -46,14 +51,22 @@ export default function Search() {
 				sm={{ span: 22, offset: 1 }}
 				xs={{ span: 22, offset: 1 }}
 			>
-				<Input.Search
-					type="text"
-					aria-label="Search box"
-					size="large"
-					value={value}
-					onChange={handleChange}
-					onSearch={handleSearch}
-				/>
+				<Space className="full-width" direction="vertical" size="large">
+					{!searchParams.get("q") && (
+						<Typography.Title className="text-center">
+							What are you curious about today? Let&apos;s explore together.
+						</Typography.Title>
+					)}
+					<Input.Search
+						ref={inputRef}
+						type="text"
+						aria-label="Search box"
+						size="large"
+						value={value}
+						onChange={handleChange}
+						onSearch={handleSearch}
+					/>
+				</Space>
 			</Col>
 		</Row>
 	);
