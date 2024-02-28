@@ -6,6 +6,7 @@ export default function ImagePreview({ src, onClose }) {
 
 	const handleVisibleChange = (isVisible) => {
 		setVisible(isVisible);
+		// Notify parent to set src to empty in order to close the preview
 		onClose();
 	};
 

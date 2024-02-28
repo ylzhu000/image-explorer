@@ -12,16 +12,7 @@ export default function ImagesList() {
 	const { loading, loadingMore, images, hasMore, errors, initialLoad } =
 		useImage();
 
-	const handleLoadMore = (e) => {
-		e.preventDefault();
-
-		const currentPage = searchParams.get("page");
-		if (currentPage) {
-			searchParams.set("page", Number(currentPage) + 1);
-			setSearchParams(searchParams);
-		}
-	};
-
+	// Return nothing before searching begins
 	if (initialLoad) return;
 
 	if (errors) {
@@ -47,6 +38,16 @@ export default function ImagesList() {
 			</div>
 		);
 	}
+
+	const handleLoadMore = (e) => {
+		e.preventDefault();
+
+		const currentPage = searchParams.get("page");
+		if (currentPage) {
+			searchParams.set("page", Number(currentPage) + 1);
+			setSearchParams(searchParams);
+		}
+	};
 
 	const handlePreview = (src) => {
 		setSelectedImage(src);

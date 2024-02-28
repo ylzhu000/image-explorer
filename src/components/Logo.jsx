@@ -1,4 +1,4 @@
-export default function Logo() {
+export default function Logo({ width = 150 }) {
 	return (
 		<a
 			href="https://www.fieldwire.com/"
@@ -8,7 +8,7 @@ export default function Logo() {
 			<img
 				src="https://www.fieldwire.com/images/Fieldwire-by-Hilti-1-line-logo.svg"
 				alt="Fieldwire by Hilti Logo"
-				width={150}
+				width={width}
 			/>
 		</a>
 	);

@@ -16,18 +16,18 @@ export function useImage() {
 		const q = searchParams.get("q");
 		const page = searchParams.get("page");
 		const isSameSearch = q === prevSearchParam;
+		const imageExtRegex = /\.(jpg|png|gif)$/i;
 
 		try {
 			if (q && page) {
 				setInitialLoad(false);
-
-				// Determine which loading to set
 				isSameSearch ? setLoadingMore(true) : setLoading(true);
+
 				let data = await getImages({ q, page });
 				data = data?.data.map((image) => ({
-					link: image.link.includes(".jpg")
+					link: imageExtRegex.test(image.link)
 						? image.link
-						: image?.images?.length && image.images[0].link,
+						: image?.images?.length && image.images[0].link, // Just grab first image of multiple for simplicity
 					title: image.title,
 					id: image.id,
 				}));
