@@ -3,7 +3,8 @@
 	width: 100%;
 
 	&__empty,
-	&__error {
+	&__error,
+	&__loading {
 		min-height: 500px;
 		display: flex;
 		justify-content: center;

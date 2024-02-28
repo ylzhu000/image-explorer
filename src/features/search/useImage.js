@@ -8,17 +8,21 @@ export function useImage() {
 	const [images, setImages] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [hasMore, setHasMore] = useState(true);
+	const [loadingMore, setLoadingMore] = useState(false);
 	const [errors, setErrors] = useState(null);
 	const [initialLoad, setInitialLoad] = useState(true);
 
 	async function fetchImages() {
 		const q = searchParams.get("q");
 		const page = searchParams.get("page");
+		const isSameSearch = q === prevSearchParam;
 
 		try {
 			if (q && page) {
 				setInitialLoad(false);
-				setLoading(true);
+
+				// Determine which loading to set
+				isSameSearch ? setLoadingMore(true) : setLoading(true);
 				const data = await getImages({ q, page });
 				setHasMore(!!data.data.length);
 
@@ -27,6 +31,7 @@ export function useImage() {
 					? setImages([...images, ...data.data])
 					: setImages(data.data);
 				setLoading(false);
+				setLoadingMore(false);
 				setPrevSearchParam(q);
 			}
 		} catch (err) {
@@ -42,8 +47,9 @@ export function useImage() {
 	return {
 		initialLoad,
 		loading,
-		images,
+		loadingMore,
 		hasMore,
+		images,
 		errors,
 	};
 }

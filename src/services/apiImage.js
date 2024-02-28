@@ -1,7 +1,7 @@
 export const getImages = async ({ q, page }) => {
 	const apiUrl = `${
 		import.meta.env.VITE_IMGUR_URL
-	}/3/gallery/search/time/all/1?q=${q}&q_type=jpg&album=false&page=${page}`;
+	}/3/gallery/search/time/all/1?q=${q}&q_type=jpg&album=false&perPage=20&page=${page}`;
 
 	try {
 		const res = await fetch(apiUrl, {

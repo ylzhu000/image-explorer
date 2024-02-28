@@ -1,13 +1,18 @@
 import { useSearchParams } from "react-router-dom";
-import { Image, Row, Col, Space, Button, Flex, Empty, Spin } from "antd";
+import { useState } from "react";
+import { Row, Col, Space, Button, Flex, Empty, Spin } from "antd";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import { useImage } from "./useImage";
+import ImagePreview from "./ImagePreview";
 
 export default function ImagesList() {
 	const [searchParams, setSearchParams] = useSearchParams();
-	const { loading, images, hasMore, errors, initialLoad } = useImage();
+	const [selectImage, setSelectedImage] = useState("");
+	const { loading, loadingMore, images, hasMore, errors, initialLoad } =
+		useImage();
 
-	const loadMore = (e) => {
+	const handleLoadMore = (e) => {
 		e.preventDefault();
 
 		const currentPage = searchParams.get("page");
@@ -27,49 +32,64 @@ export default function ImagesList() {
 		);
 	}
 
-	if (images.length === 0) {
+	if (loading) {
 		return (
-			<div className="search-container__empty">
-				{loading ? (
-					<Spin spinning={loading} />
-				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-				)}
+			<div className="search-container__loading">
+				<Spin spinning={loading} />
 			</div>
 		);
 	}
 
+	if (images.length === 0) {
+		return (
+			<div className="search-container__empty">
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+			</div>
+		);
+	}
+
+	const handlePreview = (src) => {
+		setSelectedImage(src);
+	};
+
+	const handleClose = () => {
+		setSelectedImage("");
+	};
+
 	return (
 		<Space direction="vertical" size="large">
 			<Row gutter={[16, 16]}>
-				{images?.map((image) => (
-					<Col key={image.id} xxl={4} lg={6} md={8} sm={12} xs={12}>
-						<Image
-							loading="lazy"
-							height={200}
-							width="100%"
-							src={
-								image.link.includes(".jpg")
-									? image.link
-									: image?.images?.length && image.images[0].link
-							}
-							alt={image.title}
-							fallback="https://static.vecteezy.com/system/resources/previews/009/007/136/non_2x/failed-to-load-error-page-404-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg"
-						/>
-					</Col>
-				))}
+				{images?.map((image) => {
+					const link = image.link.includes(".jpg")
+						? image.link
+						: image?.images?.length && image.images[0].link;
+					return (
+						<Col key={image.id} xxl={4} lg={6} md={8} sm={12} xs={12}>
+							<LazyLoadImage
+								key={image.id}
+								height={200}
+								width="100%"
+								src={link}
+								alt={image.title}
+								onClick={() => handlePreview(link)}
+							/>
+						</Col>
+					);
+				})}
 			</Row>
+
 			<Flex align="center" justify="center">
 				<Button
 					size="large"
 					type="primary"
-					onClick={loadMore}
-					loading={loading}
+					onClick={handleLoadMore}
+					loading={loadingMore}
 					disabled={!hasMore}
 				>
 					{hasMore ? "Load more images" : "No more images"}
 				</Button>
 			</Flex>
+			{selectImage && <ImagePreview src={selectImage} onClose={handleClose} />}
 		</Space>
 	);
 }
