@@ -4,15 +4,14 @@ import { Layout as AntLayout, Typography, Flex } from "antd";
 import Logo from "./Logo";
 
 import "../styles/layout.scss";
+import Title from "./Title";
 
 export default function Layout() {
 	return (
 		<AntLayout className="layout">
 			<AntLayout.Header className="layout__header">
 				<Flex align="center" justify="space-between">
-					<Typography.Title level={4} className="layout__header-title">
-						Image Explorer
-					</Typography.Title>
+					<Title />
 					<Logo />
 				</Flex>
 			</AntLayout.Header>

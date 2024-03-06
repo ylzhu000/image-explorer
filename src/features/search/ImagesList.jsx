@@ -9,13 +9,13 @@ import ImagePreview from "./ImagePreview";
 export default function ImagesList() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [selectImage, setSelectedImage] = useState("");
-	const { loading, loadingMore, images, hasMore, errors, initialLoad } =
-		useImage();
+	const { isLoading, images, error, hasMore } = useImage();
 
-	// Return nothing before searching begins
-	if (initialLoad) return;
+	const page = searchParams.get("page");
 
-	if (errors) {
+	if (!searchParams.get("q")) return;
+
+	if (error) {
 		return (
 			<div className="search-container__error">
 				Something went wrong, please try again
@@ -23,15 +23,15 @@ export default function ImagesList() {
 		);
 	}
 
-	if (loading) {
+	if (isLoading && page <= 1) {
 		return (
 			<div className="search-container__loading">
-				<Spin spinning={loading} />
+				<Spin spinning={isLoading} />
 			</div>
 		);
 	}
 
-	if (images.length === 0) {
+	if (images?.length === 0) {
 		return (
 			<div className="search-container__empty">
 				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -42,9 +42,8 @@ export default function ImagesList() {
 	const handleLoadMore = (e) => {
 		e.preventDefault();
 
-		const currentPage = searchParams.get("page");
-		if (currentPage) {
-			searchParams.set("page", Number(currentPage) + 1);
+		if (page) {
+			searchParams.set("page", Number(page) + 1);
 			setSearchParams(searchParams);
 		}
 	};
@@ -78,7 +77,7 @@ export default function ImagesList() {
 					size="large"
 					type="primary"
 					onClick={handleLoadMore}
-					loading={loadingMore}
+					loading={isLoading}
 					disabled={!hasMore}
 				>
 					{hasMore ? "Load more images" : "No more images"}
