@@ -12,7 +12,6 @@ export function useImage() {
 	const page = searchParams.get("page");
 	const imageExtRegex = /\.(jpg|png|gif)$/i;
 
-	// React Query code
 	const { data, error, isLoading } = useQuery({
 		queryFn: () => getImages({ q, page }),
 		queryKey: ["search", q, page],
